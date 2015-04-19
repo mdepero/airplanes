@@ -63,8 +63,8 @@ void setup(){
   
   
   // ************************************EVENTUALLY SHOULD BE INITIALIZED WITH FIRST PLAYER BUTTON START OR TWO PLAYER BUTTON START DEPENDING
-  p1 = new Plane("Player 1");
-  p2 = new Plane("Player 2");
+  p1 = new Plane();
+  p2 = new Plane();
   
   allPlanes.add(p1);
   allPlanes.add(p2);
@@ -88,7 +88,7 @@ void draw(){
 
 void keyPressed(){
   
-  if(key == 'd'){
+  if(key == Buttons.PLAYER_1_JOYSTICK_UP){
     p1.startRightTurn();
   }
   
@@ -208,37 +208,25 @@ class Plane {
   
   String name;
   
-  Plane(float startX,float startY,float startDirection,float startSpeed,int startHealth,String playerName){
+  Plane(float startX,float startY,float startDirection,float startSpeed,int startHealth){
     x = startX;
     y = startY;
     direction = startDirection;
     speed = startSpeed;
     healthLevel = startHealth;
     
-    name = playerName;
     
   }
   
   Plane(){
     
-    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y,0,BASE_SPEED,DEFAULT_ENEMY_HEALTHLEVEL,"Enemy");
-    
-  }
-  
-  Plane(String playerName){
-    
-    if(playerName.equals("Player 1")){
-      this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, 0 ,BASE_SPEED,DEFAULT_PLAYER_HEALTHLEVEL,playerName);
-    }
-    if(playerName.equals("Player 2")){
-      this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, PI,BASE_SPEED,DEFAULT_PLAYER_HEALTHLEVEL,playerName);
-    }
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y,0,BASE_SPEED,DEFAULT_PLAYER_HEALTHLEVEL);
     
   }
   
   Plane(float startDirection){
     
-    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED,DEFAULT_ENEMY_HEALTHLEVEL,"Enemy");
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED,DEFAULT_ENEMEY_HEALTHLEVEL);
     
   }
   

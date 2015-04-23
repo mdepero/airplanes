@@ -89,54 +89,46 @@ void draw(){
 
 void keyPressed(){
   
-  if(key == 'd'){
+  if(key == Buttons.PLAYER_1_JOYSTICK_RIGHT){
     p1.startRightTurn();
   }
   
-  if(key == 'a'){
+  if(key == Buttons.PLAYER_1_JOYSTICK_LEFT){
     p1.startLeftTurn();
   }
   
-  if(key == 'r'){
+  if(key == Buttons.PLAYER_1_BUTTON_1){
     p1.shooting = true;
   }
   
-  if(key == ';'){
+  if(key == Buttons.PLAYER_2_JOYSTICK_RIGHT){
     p2.startRightTurn();
   }
   
-  if(key == 'k'){
+  if(key == Buttons.PLAYER_2_JOYSTICK_LEFT){
     p2.startLeftTurn();
   }
   
-  if(key == 'u'){
-    p2.shooting = true;;
+  if(key == Buttons.PLAYER_2_BUTTON_1){
+    p2.shooting = true;
   }
   
 }
 
 void keyReleased(){
   
-  if(key == 'd'){
+  if(key == Buttons.PLAYER_1_JOYSTICK_RIGHT || key == Buttons.PLAYER_1_JOYSTICK_LEFT){
     p1.endTurn();
   }
   
-  if(key == 'a'){
-    p1.endTurn();
-  }
-  
-  if(key == 'k'){
+  if(key == Buttons.PLAYER_2_JOYSTICK_RIGHT || key == Buttons.PLAYER_2_JOYSTICK_LEFT){
     p2.endTurn();
   }
   
-  if(key == ';'){
-    p2.endTurn();
-  }
-  
-  if(key == 'r'){
+  if(key == Buttons.PLAYER_1_BUTTON_1){
     p1.shooting = false;
   }
-  if(key == 'u'){
+  if(key == Buttons.PLAYER_2_BUTTON_1){
     p2.shooting = false;
   }
  

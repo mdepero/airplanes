@@ -8,30 +8,56 @@ class Plane{
   float deltaDirection = 0;
   float speed;
   
-  boolean shooting = false;
+  boolean shooting;
   int coolDown = 0;
+  int coolDownTime;
+  
+  boolean player;
   
   String name;
   
-  Plane(float startX,float startY,float startDirection,float startSpeed,int startHealth){
+  Plane(float startX,float startY,float startDirection,float startSpeed, boolean ifPlayer){
     x = startX;
     y = startY;
     direction = startDirection;
     speed = startSpeed;
-    healthLevel = startHealth;
+    if(ifPlayer){
+      healthLevel = DEFAULT_PLAYER_HEALTHLEVEL;
+      shooting = false;
+      coolDownTime = COOL_DOWN_TIME;
+    }else{
+      healthLevel = DEFAULT_ENEMY_HEALTHLEVEL;
+      shooting = true;
+      coolDownTime = COOL_DOWN_TIME_ENEMY;
+      coolDown = (int)(Math.random()*COOL_DOWN_TIME_ENEMY);
+    }
+    
+    player = ifPlayer;
     
     
   }
   
   Plane(){
     
-    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y,0,BASE_SPEED,DEFAULT_PLAYER_HEALTHLEVEL);
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y,0,BASE_SPEED, false);
+    
+  }
+  
+  Plane(float startDirection, boolean ifPlayer){
+    
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED, ifPlayer);
     
   }
   
   Plane(float startDirection){
     
-    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED,DEFAULT_PLAYER_HEALTHLEVEL);
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED, false);
+    
+  }
+  
+  Plane(float startDirection, float startx, float starty){
+    
+    this(startx, starty, startDirection ,BASE_SPEED, false);
     
   }
   
@@ -78,7 +104,7 @@ class Plane{
       
       shoot();
       
-      coolDown = COOL_DOWN_TIME;
+      coolDown = coolDownTime;
       
     }
     
@@ -95,8 +121,16 @@ class Plane{
     pushMatrix(); 
     translate(x,y);
     rotate(direction);
-    stroke((int)(255*((DEFAULT_PLAYER_HEALTHLEVEL*1.0-healthLevel)/DEFAULT_PLAYER_HEALTHLEVEL)),
-     (int)(255*(healthLevel*1.0/DEFAULT_PLAYER_HEALTHLEVEL)) ,0);
+    
+    if(player){
+      stroke((int)(255*((DEFAULT_PLAYER_HEALTHLEVEL*1.0-healthLevel)/DEFAULT_PLAYER_HEALTHLEVEL)),
+     0 ,(int)(255*(healthLevel*1.0/DEFAULT_PLAYER_HEALTHLEVEL)));
+    }else{
+      stroke((int)(255*((DEFAULT_PLAYER_HEALTHLEVEL*1.0-healthLevel)/DEFAULT_PLAYER_HEALTHLEVEL)),
+     (int)(255*(healthLevel*1.0/DEFAULT_ENEMY_HEALTHLEVEL)) ,0);
+    }
+     
+     
     strokeWeight(PLANE_THICKNESS);
     line(0,0,-PLANE_LENGTH,0);
     line(-WING_PROPORTION*PLANE_LENGTH,PLANE_WIDTH,-WING_PROPORTION*PLANE_LENGTH,-PLANE_WIDTH);
@@ -106,7 +140,7 @@ class Plane{
   
   void shoot(){
     
-    bullets.add(new Bullet(x+1,y+1,direction));
+    bullets.add(new Bullet(x+1,y+1,direction, player));
     
   }
   
@@ -119,9 +153,12 @@ class Plane{
       
       Bullet b = bullets.get(i);
       
-      if(Line2D.linesIntersect(b.x,b.y,b.getXLine(),b.getYLine(),x,y,getXLine(),getYLine()) ||
-          Line2D.linesIntersect(b.x,b.y,b.getXLine(),b.getYLine(),
-            getWing1X(),getWing1Y(),getWing2X(),getWing2Y())   ){
+      if(  (    
+          Line2D.linesIntersect(b.x,b.y,b.getXLine(),b.getYLine(),x,y,getXLine(),getYLine()) ||
+          Line2D.linesIntersect(b.x,b.y,b.getXLine(),b.getYLine(),getWing1X(),getWing1Y(),getWing2X(),getWing2Y())   
+            )
+            && (NUM_OF_PLAYERS == 2 || b.player != player)){
+              
            
           healthLevel--;
           bullets.remove(i);

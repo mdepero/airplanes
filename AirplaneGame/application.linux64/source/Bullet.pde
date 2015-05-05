@@ -6,13 +6,17 @@ class Bullet{
   float direction;
   float speed;
   
-  Bullet (float startX, float startY, float startDirection){
+  boolean player;
+  
+  Bullet (float startX, float startY, float startDirection, boolean ifPlayer){
     
     x = startX;
     y = startY;
     direction = startDirection;
     
     speed = BASE_BULLET_SPEED;
+    
+    player = ifPlayer;
     
   }
   
@@ -32,7 +36,7 @@ class Bullet{
   
   boolean isOffScreen(){
     
-    if(x+speed>displayWidth || x-speed < 0 || y+speed>displayHeight || y-speed<0){
+    if(x+(speed*2)>displayWidth || x-(speed*2) < 0 || y+(speed*2)>displayHeight || y-(speed*2)<0){
       return true;
     }else{
       return false;
@@ -43,13 +47,13 @@ class Bullet{
   
   float getXLine(){
     
-    return x + cos(direction)*speed;
+    return x + cos(direction)*speed*2;
     
   }
   
   float getYLine(){
     
-    return y + sin(direction)*speed;
+    return y + sin(direction)*speed*2;
     
   }
   

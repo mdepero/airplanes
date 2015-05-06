@@ -6,9 +6,9 @@ class Bullet{
   float direction;
   float speed;
   
-  boolean player;
+  int player;
   
-  Bullet (float startX, float startY, float startDirection, boolean ifPlayer){
+  Bullet (float startX, float startY, float startDirection, int ifPlayer){
     
     x = startX;
     y = startY;

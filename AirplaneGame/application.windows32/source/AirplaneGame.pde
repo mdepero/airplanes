@@ -24,6 +24,10 @@ int DEFAULT_ENEMY_HEALTHLEVEL = 2;
 int COOL_DOWN_TIME = 10;
 int COOL_DOWN_TIME_ENEMY = 100;
 
+color PLAYER_ONE_BEZEL_COLOR = #0000FF;
+color PLAYER_TWO_BEZEL_COLOR = #FF0000;
+int PLAYER_BEZEL_THICKNESS = 8;
+
 float TURN_RADIUS = .05;
 float BASE_SPEED = 5;
 
@@ -330,11 +334,11 @@ void startGame(int numOfPlayers){
   
   NUM_OF_PLAYERS = numOfPlayers;
   
-  p1 = new Plane(0, true);
+  p1 = new Plane(0, 1);
   allPlanes.add(p1);
   
   if(NUM_OF_PLAYERS == 2){
-    p2 = new Plane(PI, true);
+    p2 = new Plane(PI, 2);
     allPlanes.add(p2);
   }else{
     

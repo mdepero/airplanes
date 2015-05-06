@@ -42,6 +42,10 @@ int DEFAULT_ENEMY_HEALTHLEVEL = 2;
 int COOL_DOWN_TIME = 10;
 int COOL_DOWN_TIME_ENEMY = 100;
 
+int PLAYER_ONE_BEZEL_COLOR = 0xff0000FF;
+int PLAYER_TWO_BEZEL_COLOR = 0xffFF0000;
+int PLAYER_BEZEL_THICKNESS = 8;
+
 float TURN_RADIUS = .05f;
 float BASE_SPEED = 5;
 
@@ -348,11 +352,11 @@ public void startGame(int numOfPlayers){
   
   NUM_OF_PLAYERS = numOfPlayers;
   
-  p1 = new Plane(0, true);
+  p1 = new Plane(0, 1);
   allPlanes.add(p1);
   
   if(NUM_OF_PLAYERS == 2){
-    p2 = new Plane(PI, true);
+    p2 = new Plane(PI, 2);
     allPlanes.add(p2);
   }else{
     
@@ -494,9 +498,9 @@ class Bullet{
   float direction;
   float speed;
   
-  boolean player;
+  int player;
   
-  Bullet (float startX, float startY, float startDirection, boolean ifPlayer){
+  Bullet (float startX, float startY, float startDirection, int ifPlayer){
     
     x = startX;
     y = startY;
@@ -588,16 +592,16 @@ class Plane{
   int coolDown = 0;
   int coolDownTime;
   
-  boolean player;
+  int player;
   
   String name;
   
-  Plane(float startX,float startY,float startDirection,float startSpeed, boolean ifPlayer){
+  Plane(float startX,float startY,float startDirection,float startSpeed, int ifPlayer){
     x = startX;
     y = startY;
     direction = startDirection;
     speed = startSpeed;
-    if(ifPlayer){
+    if(ifPlayer == 1 || ifPlayer == 2){
       healthLevel = DEFAULT_PLAYER_HEALTHLEVEL;
       shooting = false;
       coolDownTime = COOL_DOWN_TIME;
@@ -615,11 +619,11 @@ class Plane{
   
   Plane(){
     
-    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y,0,BASE_SPEED, false);
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y,0,BASE_SPEED, 0);
     
   }
   
-  Plane(float startDirection, boolean ifPlayer){
+  Plane(float startDirection, int ifPlayer){
     
     this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED, ifPlayer);
     
@@ -627,13 +631,13 @@ class Plane{
   
   Plane(float startDirection){
     
-    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED, false);
+    this(DEFAULT_PLANE_X,DEFAULT_PLANE_Y, startDirection ,BASE_SPEED, 0);
     
   }
   
   Plane(float startDirection, float startx, float starty){
     
-    this(startx, starty, startDirection ,BASE_SPEED, false);
+    this(startx, starty, startDirection ,BASE_SPEED, 0);
     
   }
   
@@ -698,9 +702,29 @@ class Plane{
     translate(x,y);
     rotate(direction);
     
-    if(player){
+    
+    
+    // set plane health colors
+    if(player == 1 || player == 2){
+      
+      // Draw player bezels
+      if( player == 1 ){
+        stroke(PLAYER_ONE_BEZEL_COLOR);
+        strokeWeight(PLANE_THICKNESS + PLAYER_BEZEL_THICKNESS);
+        line(0,0,-PLANE_LENGTH,0);
+        line(-WING_PROPORTION*PLANE_LENGTH,PLANE_WIDTH,-WING_PROPORTION*PLANE_LENGTH,-PLANE_WIDTH);
+      }
+      if( player == 2 ){
+        stroke(PLAYER_TWO_BEZEL_COLOR);
+        strokeWeight(PLANE_THICKNESS + PLAYER_BEZEL_THICKNESS);
+        line(0,0,-PLANE_LENGTH,0);
+        line(-WING_PROPORTION*PLANE_LENGTH,PLANE_WIDTH,-WING_PROPORTION*PLANE_LENGTH,-PLANE_WIDTH);
+        
+      }
+      
+      
       stroke((int)(255*((DEFAULT_PLAYER_HEALTHLEVEL*1.0f-healthLevel)/DEFAULT_PLAYER_HEALTHLEVEL)),
-     0 ,(int)(255*(healthLevel*1.0f/DEFAULT_PLAYER_HEALTHLEVEL)));
+      (int)(255*(healthLevel*1.0f/DEFAULT_PLAYER_HEALTHLEVEL)), 0);
     }else{
       stroke((int)(255*((DEFAULT_PLAYER_HEALTHLEVEL*1.0f-healthLevel)/DEFAULT_PLAYER_HEALTHLEVEL)),
      (int)(255*(healthLevel*1.0f/DEFAULT_ENEMY_HEALTHLEVEL)) ,0);
@@ -733,7 +757,7 @@ class Plane{
           Line2D.linesIntersect(b.x,b.y,b.getXLine(),b.getYLine(),x,y,getXLine(),getYLine()) ||
           Line2D.linesIntersect(b.x,b.y,b.getXLine(),b.getYLine(),getWing1X(),getWing1Y(),getWing2X(),getWing2Y())   
             )
-            && (NUM_OF_PLAYERS == 2 || b.player != player)){
+            &&  b.player != player){
               
            
           healthLevel--;
